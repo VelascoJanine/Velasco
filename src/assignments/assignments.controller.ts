@@ -26,10 +26,27 @@ export class AssignmentsController {
   }
 
   private checkPrime(n: number): boolean {
-    if (n <= 1) return false; // 0 and 1 are not prime numbers
+    if (n <= 1) return false;
     for (let i = 2; i <= Math.sqrt(n); i++) {
-      if (n % i === 0) return false; // found a divisor
+      if (n % i === 0) return false;
     }
-    return true; // no divisors found, n is prime
+    return true;
+  }
+
+  @Get('factorial/:number')
+  calculateFactorial(@Param('number') number: string): { factorial: number } {
+    const num = parseInt(number);
+    const result = this.factorial(num);
+    return { factorial: result };
+  }
+
+  private factorial(n: number): number {
+    if (n < 0) return -1; // Factorial is not defined for negative numbers
+    if (n === 0 || n === 1) return 1; // 0! = 1 and 1! = 1
+    let result = 1;
+    for (let i = 2; i <= n; i++) {
+      result *= i;
+    }
+    return result;
   }
 }
