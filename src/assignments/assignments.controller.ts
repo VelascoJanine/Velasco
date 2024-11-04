@@ -2,20 +2,34 @@ import { Controller, Get, Param } from '@nestjs/common';
 
 @Controller('assignments')
 export class AssignmentsController {
+  
   @Get('fibonacci/:n')
   getFibonacci(@Param('n') n: string): { sequence: number[] } {
-    const num = parseInt(n, 10);
-    const sequence = this.fibonacci(num);
+    const num = parseInt(n);
+    const sequence = this.calculateFibonacci(num);
     return { sequence };
   }
 
-  private fibonacci(n: number): number[] {
-    const sequence: number[] = [];
-    let a = 0, b = 1;
-    for (let i = 0; i < n; i++) {
-      sequence.push(a);
-      [a, b] = [b, a + b]; // Update a and b
+  private calculateFibonacci(n: number): number[] {
+    const fib = [0, 1];
+    for (let i = 2; i < n; i++) {
+      fib[i] = fib[i - 1] + fib[i - 2];
     }
-    return sequence;
+    return fib.slice(0, n);
+  }
+
+  @Get('prime/:number')
+  isPrime(@Param('number') number: string): { isPrime: boolean } {
+    const num = parseInt(number);
+    const result = this.checkPrime(num);
+    return { isPrime: result };
+  }
+
+  private checkPrime(n: number): boolean {
+    if (n <= 1) return false; // 0 and 1 are not prime numbers
+    for (let i = 2; i <= Math.sqrt(n); i++) {
+      if (n % i === 0) return false; // found a divisor
+    }
+    return true; // no divisors found, n is prime
   }
 }
